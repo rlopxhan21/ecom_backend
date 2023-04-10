@@ -1,5 +1,5 @@
 # ecom_backend
-My Ecommerce Project is a full-stack web application built with Django, Django Rest Framework, React, TypeScript, Material UI, Postgres, and Stripe. The project includes an admin CMS and allows users to add items to their cart and make purchases. The website is currently hosted at <<Deploying Soon>>.
+This ecom repo is a full-stack web application built with Django, Django Rest Framework, React, TypeScript, Material UI, Postgres, and Stripe. The project includes an admin CMS and allows users to add items to their cart and make purchases. The website is currently hosted at <<Deploying Soon>>.
 
 ## Tech Stacks
 - Django
@@ -22,7 +22,6 @@ My Ecommerce Project is a full-stack web application built with Django, Django R
 - Responsive design using Material UI
 
 ## Getting Started
-Creative Commons Zero v1.0 Universal
 
 - Clone the repository:
 ```
