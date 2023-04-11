@@ -29,6 +29,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'oauth2_provider',
+    'social_django',
+    'rest_framework_social_oauth2',
     'rest_framework_simplejwt.token_blacklist',
     'useraccount.apps.UseraccountConfig',
 ]
@@ -131,6 +134,8 @@ AUTH_USER_MODEL = 'useraccount.CustomUser'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+        'django.contrib.auth.backends.ModelBackend',
     ],
 }
 
@@ -176,3 +181,20 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+
+# Social Authentication Config
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your-google-oauth2-key'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your-google-oauth2-secret'
+SOCIAL_AUTH_FACEBOOK_KEY = 'your-facebook-key'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'your-facebook-secret'
+SOCIAL_AUTH_TWITTER_KEY = 'your-twitter-key'
+SOCIAL_AUTH_TWITTER_SECRET = 'your-twitter-secret'
