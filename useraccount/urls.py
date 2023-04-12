@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenBlacklistView
 )
 
-from .views import UserRegistrationView, UserDetailView
+from .views import UserRegistrationView, UserDetailView, PasswordResetView, PasswordResetConfirmView
 
 
 urlpatterns = [
@@ -15,6 +15,8 @@ urlpatterns = [
     path('token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token-blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
 
-    path('me/', UserDetailView.as_view(), name="user-detail"),
+    path('password-reset/', PasswordResetView.as_view(), name="password-reset"),
+    path('password-reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
 
+    path('me/', UserDetailView.as_view(), name="user-detail"),
 ]
