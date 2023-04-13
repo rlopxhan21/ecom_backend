@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from .models import CustomUser
@@ -87,3 +88,22 @@ class EmailChangeSerializer(serializers.Serializer):
             return email
         
         raise serializers.ValidationError({"message": "This Email Address already exist!"})
+    
+
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password1 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+
+    def validate(self, data):
+        old_password = data.get("old_password")
+        password1 = data.get('password1')
+        password2 = data.get('password2')
+        
+        if password1 and password2 and password1 != password2:
+            raise serializers.ValidationError({"message": "Your new password and new confirm password does not match!"})
+        
+        if old_password == password1:
+            raise serializers.ValidationError({"message": "Your new password can't be same as old password"})
+        
+        return data

@@ -8,7 +8,7 @@ from rest_framework import mixins, generics, permissions, status
 from rest_framework.response import Response
 
 from .models import CustomUser
-from .serializers import CustomUserSerializer, CustomUserRegisterSerializer, UserActivationSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer, EmailChangeSerializer
+from .serializers import CustomUserSerializer, CustomUserRegisterSerializer, UserActivationSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer, EmailChangeSerializer, PasswordChangeSerializer
 
 class UserDetailView(mixins.ListModelMixin, generics.GenericAPIView):
     """This view shows the user information of authenticated user."""
@@ -161,4 +161,26 @@ class EmailChangeConfirmView(generics.GenericAPIView):
             return Response({'message': "Your email is changed successfully!"}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "Your token is invalid!"}, status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordChangeView(mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = PasswordChangeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        old_password = serializer.validated_data['old_password']
+        password1 = serializer.validated_data['password1']
+
+        if not self.request.user.check_password(old_password):
+            return Response({"message": "Your old password does not match!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        self.request.user.set_password(password1)
+        self.request.user.save()
+        return Response({"message": "You changed your password successfully!"}, status=status.HTTP_200_OK)
+        
+
+        
+
 
