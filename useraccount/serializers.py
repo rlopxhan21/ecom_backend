@@ -1,3 +1,5 @@
+from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from .models import CustomUser
@@ -36,6 +38,20 @@ class CustomUserRegisterSerializer(serializers.ModelSerializer):
         return account
     
 
+class UserActivationSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, email):
+        try:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError({"message": "This Email Address is not found in the system!"})
+        
+        if user.is_active:
+            raise ValidationError("This account is already been activated!") 
+
+        return email
+
 
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -44,7 +60,7 @@ class PasswordResetSerializer(serializers.Serializer):
         try:
             CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
-            raise serializers.ValidationError({"message": "Email not found in the system!"})
+            raise serializers.ValidationError({"message": "This Email Address is not found in the system!"})
         
         return email
     

@@ -5,11 +5,14 @@ from rest_framework_simplejwt.views import (
     TokenBlacklistView
 )
 
-from .views import UserRegistrationView, UserDetailView, PasswordResetView, PasswordResetConfirmView
+from .views import UserRegistrationView, UserDetailView, UserActivationView, UserActivationConfirmView, PasswordResetView, PasswordResetConfirmView
 
 
 urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name="register"),
+
+    path('account-activate/', UserActivationView.as_view(), name="account-activate"),
+    path('account-activate/<uidb64>/<token>/', UserActivationConfirmView.as_view(), name="account-activate-confirm"),
     
     path('token-create/', TokenObtainPairView.as_view(), name='token_create'),
     path('token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
