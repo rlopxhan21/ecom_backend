@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenBlacklistView
 )
 
-from .views import UserRegistrationView, UserDetailView, UserActivationView, UserActivationConfirmView, PasswordResetView, PasswordResetConfirmView
+from .views import UserRegistrationView, UserDetailView, UserActivationView, UserActivationConfirmView, PasswordResetView, PasswordResetConfirmView, EmailChangeView, EmailChangeConfirmView
 
 
 urlpatterns = [
@@ -20,6 +20,9 @@ urlpatterns = [
 
     path('password-reset/', PasswordResetView.as_view(), name="password-reset"),
     path('password-reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
+
+    path('email-change/', EmailChangeView.as_view(), name="email_change"),
+    path('email-change/<uidb64>/<token>/<eid>/', EmailChangeConfirmView.as_view(), name="email_change_confirm"),
 
     path('me/', UserDetailView.as_view(), name="user-detail"),
 ]

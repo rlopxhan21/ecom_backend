@@ -1,5 +1,3 @@
-from django.contrib.auth import authenticate
-from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from .models import CustomUser
@@ -48,7 +46,7 @@ class UserActivationSerializer(serializers.Serializer):
             raise serializers.ValidationError({"message": "This Email Address is not found in the system!"})
         
         if user.is_active:
-            raise ValidationError("This account is already been activated!") 
+            raise serializers.ValidationError({'message':"This account is already been activated!"}) 
 
         return email
 
@@ -77,3 +75,15 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
             raise serializers.ValidationError({"message": "Password and Confirm Password must match! "})
 
         return password
+    
+
+class EmailChangeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, email):
+        try:
+            CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            return email
+        
+        raise serializers.ValidationError({"message": "This Email Address already exist!"})

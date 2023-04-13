@@ -8,7 +8,7 @@ from rest_framework import mixins, generics, permissions, status
 from rest_framework.response import Response
 
 from .models import CustomUser
-from .serializers import CustomUserSerializer, CustomUserRegisterSerializer, UserActivationSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer
+from .serializers import CustomUserSerializer, CustomUserRegisterSerializer, UserActivationSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer, EmailChangeSerializer
 
 class UserDetailView(mixins.ListModelMixin, generics.GenericAPIView):
     """This view shows the user information of authenticated user."""
@@ -118,3 +118,47 @@ class PasswordResetConfirmView(mixins.UpdateModelMixin, generics.GenericAPIView)
             return Response({"message": "Your password's changed sucessfully!"}, status=status.HTTP_201_CREATED)
         
         return Response({'message': 'Your token is invalid!'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmailChangeView(mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = EmailChangeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        new_email = serializer.validated_data['email']
+        user = CustomUser.objects.get(email=self.request.user.email)
+
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        eid = urlsafe_base64_encode(force_bytes(new_email))
+        activation_url = f"http://localhost:8000/auth/email-change/{uid}/{token}/{eid}/"
+
+        send_mail(
+            subject= "Account Activation",
+            message = f"Click on this link to confirm your new email address: {activation_url}",
+            from_email=config("EMAIL_HOST_USER"),
+            recipient_list=[new_email],
+            fail_silently=False
+        )
+                
+        return Response({'message': "Email Change confirmation link sent successfully!"}, status=status.HTTP_200_OK)
+
+class EmailChangeConfirmView(generics.GenericAPIView):
+    def get(self, request, uidb64, token, eid):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            email = force_str(urlsafe_base64_decode(eid))
+            user = CustomUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            user.email = email
+            user.save()
+            return Response({'message': "Your email is changed successfully!"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Your token is invalid!"}, status=status.HTTP_400_BAD_REQUEST)
+
