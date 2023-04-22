@@ -6,4 +6,7 @@ urlpatterns = [
 
     # User Account
     path('auth/', include('useraccount.urls')),
+
+    # Products
+    path('product/', include("products.urls")),
 ]
