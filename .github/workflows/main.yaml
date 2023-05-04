@@ -19,7 +19,7 @@ jobs:
       - name: Setup Python 3.7
         uses: actions/setup-python@v2
         with:
-          python-version: 3.6
+          python-version: 3.7
 
       - name: Install required dependencies
         run: |
