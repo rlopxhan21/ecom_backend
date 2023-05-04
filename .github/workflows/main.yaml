@@ -27,5 +27,8 @@ jobs:
       - name: Run Tests
         env:
           SECRET_KEY: ${{secrets.SECRET_KEY}}
+          DEBUG: ${{secrets.DEBUG}}
+          ALLOWED_HOSTS: ${{secrets.ALLOWED_HOSTS}}
+          CORS_ALLOWED_ORIGINS: ${{CORS_ALLOWED_ORIGINS}}
         run: |
           pytest -v
