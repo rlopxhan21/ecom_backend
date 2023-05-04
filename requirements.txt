@@ -5,11 +5,12 @@ charset-normalizer==3.1.0
 cryptography==40.0.1
 defusedxml==0.7.1
 Deprecated==1.2.13
-Django==4.2
+Django==3.2.19
 django-braces==1.15.0
 django-cors-headers==3.14.0
 django-oauth-toolkit==2.2.0
 django-rest-framework-social-oauth2==1.1.0
+django-split-settings==1.2.0
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 execnet==1.9.0
