@@ -3,10 +3,6 @@ from decouple import config
 
 from .base import *
 
-# Custom User Model
-AUTH_USER_MODEL = 'useraccount.CustomUser'
-
-
 # REST Framework Configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
