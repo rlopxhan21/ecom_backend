@@ -27,3 +27,5 @@ def test_token_create_with_correct_email_and_password(client) -> None:
     response = client.post(path='/auth/token-create/',
                            data={"email": "admin@admin.com", "password": "admin"})
     content = json.loads(response.content)
+
+    assert response.status_code == 200
