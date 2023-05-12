@@ -45,7 +45,7 @@ jobs:
           pytest -v
 
       - name: Push Main Branch into Production
-        uses: ecom_backend/action-branch-to-branch@main
+        uses: ecom_backend/push-to-production@main
         with:
           dest_branch: production_v1
           source_branch: main
