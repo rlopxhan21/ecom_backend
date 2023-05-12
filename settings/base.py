@@ -126,7 +126,7 @@ USE_TZ = True
 # STATIC_ROOT
 STATIC_URL = 'static/'
 
-STATIC_ROOT = '/ecom_backend/'
+# STATIC_ROOT = '/ecom_backend/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
